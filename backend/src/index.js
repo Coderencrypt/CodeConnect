@@ -1,28 +1,32 @@
 // const express = require("express")
 import express from "express";
-import path from "path"
+import path from "path";
 
 import { ENV } from "./lib/env.js";
 import { connectDB } from "./lib/db.js";
 
 const app = express();
 
-const __dirname = path.resolve()
 
-app.get("/health",(req,res)=>{
-    res.status(200).json({msg:"api is up and running"})
+
+const __dirname = path.resolve();
+
+app.get("/health", (req, res) => {
+    res.status(200).json({ msg: "api is up and running" });
 });
 
-app.get("/books",(req,res)=>{
-    res.status(200).json({msg:"this is a books endpoint"})
+app.get("/books", (req, res) => {
+    res.status(200).json({ msg: "this is a books endpoint" });
 });
 
-// make our app ready for deployment
-if(ENV.NODE_ENV === "production"){
-    app.use(express.static(path.join(__dirname,"../frontend/dist")))
+// Corrected deployment logic
+if (ENV.NODE_ENV === "production") {
+    // 1. Point to frontend/dist directly from the root
+    app.use(express.static(path.join(__dirname, "frontend", "dist")));
 
-    app.get("*", (req,res)=>{
-        res.sendFile(path.join(__dirname,"../frontend","dist","index.html"));
+    // 2. Serve index.html for any non-API routes
+    app.get("*", (req, res) => {
+        res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
     });
 }
 
