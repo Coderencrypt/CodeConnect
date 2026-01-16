@@ -71,9 +71,8 @@ if (process.env.NODE_ENV === "production" || ENV.NODE_ENV === "production") {
     // Serve static files
     app.use(express.static(frontendPath));
 
-    // The "Express 5" compatible catch-all
-    // :any* tells Express to match everything and call it 'any'
-    app.get("/:any*", (req, res) => {
+    // Catch-all route to serve index.html for SPA
+    app.get("/*", (req, res) => {
         res.sendFile(path.resolve(frontendPath, "index.html"));
     });
 }
