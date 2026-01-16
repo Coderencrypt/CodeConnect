@@ -45,6 +45,59 @@
 // startIndex();
 
 
+// import express from "express";
+// import path from "path";
+// import { ENV } from "./lib/env.js";
+// import { connectDB } from "./lib/db.js";
+
+// const app = express();
+// const __dirname = path.resolve();
+
+// // --- 1. MIDDLEWARE ---
+// app.use(express.json());
+
+// // --- 2. API ROUTES ---
+// // (Your existing routes)
+// app.get("/health", (req, res) => {
+//     res.status(200).json({ msg: "api is up and running" });
+// });
+
+// app.get("/books", (req, res) => {
+//     res.status(200).json({ msg: "this is a books endpoint" });
+// });
+
+// // --- 3. DEPLOYMENT LOGIC (FRONTEND) ---
+// // This must stay AFTER your API routes
+// if (process.env.NODE_ENV === "production" || ENV.NODE_ENV === "production") {
+//     const frontendPath = path.join(__dirname, "frontend", "dist");
+
+//     // Serve static files from the Vite build folder
+//     app.use(express.static(frontendPath));
+
+//     // Handle React routing (The "Catch-all" route)
+//     app.get("*", (req, res) => {
+//         res.sendFile(path.resolve(frontendPath, "index.html"));
+//     });
+// }
+
+// // --- 4. SERVER STARTUP ---
+// const startIndex = async () => {
+//     try {
+//         await connectDB();
+//         // Use process.env.PORT as a fallback to ensure Render can bind to the port
+//         const PORT = process.env.PORT || ENV.PORT || 10000;
+//         app.listen(PORT, () => {
+//             console.log(`☑️ Server is running on port: ${PORT}`);
+//         });
+//     } catch (error) {
+//         console.error("💥 Error starting the server", error);
+//         process.exit(1);
+//     }
+// };
+
+// startIndex();
+
+
 import express from "express";
 import path from "path";
 import { ENV } from "./lib/env.js";
@@ -53,11 +106,9 @@ import { connectDB } from "./lib/db.js";
 const app = express();
 const __dirname = path.resolve();
 
-// --- 1. MIDDLEWARE ---
 app.use(express.json());
 
-// --- 2. API ROUTES ---
-// (Your existing routes)
+// API Routes
 app.get("/health", (req, res) => {
     res.status(200).json({ msg: "api is up and running" });
 });
@@ -66,25 +117,20 @@ app.get("/books", (req, res) => {
     res.status(200).json({ msg: "this is a books endpoint" });
 });
 
-// --- 3. DEPLOYMENT LOGIC (FRONTEND) ---
-// This must stay AFTER your API routes
+// Deployment Logic
 if (process.env.NODE_ENV === "production" || ENV.NODE_ENV === "production") {
     const frontendPath = path.join(__dirname, "frontend", "dist");
-
-    // Serve static files from the Vite build folder
     app.use(express.static(frontendPath));
 
-    // Handle React routing (The "Catch-all" route)
-    app.get("*", (req, res) => {
+    // Use (.*) for Express 5 compatibility
+    app.get("(.*)", (req, res) => {
         res.sendFile(path.resolve(frontendPath, "index.html"));
     });
 }
 
-// --- 4. SERVER STARTUP ---
 const startIndex = async () => {
     try {
         await connectDB();
-        // Use process.env.PORT as a fallback to ensure Render can bind to the port
         const PORT = process.env.PORT || ENV.PORT || 10000;
         app.listen(PORT, () => {
             console.log(`☑️ Server is running on port: ${PORT}`);
