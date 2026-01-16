@@ -3,14 +3,12 @@ import mongoose from "mongoose";
 const userSchema = new mongoose.Schema({
     name: {
         type:String,
-        requred:true,
-    },
-    email : {
+        required:true,
+    },    email : {
         type : String,
         required : true ,
-        unique :trusted
-    },
-    profileImage : {
+        unique : true
+    },    profileImage : {
         type : String,
         default : ""
     },
