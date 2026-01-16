@@ -68,11 +68,10 @@ app.get("/books", (req, res) => {
 if (process.env.NODE_ENV === "production" || ENV.NODE_ENV === "production") {
     const frontendPath = path.join(__dirname, "frontend", "dist");
     
-    // Serve static files
     app.use(express.static(frontendPath));
 
-    // Catch-all route to serve index.html for SPA
-    app.get("/*", (req, res) => {
+    // Match all routes that are NOT handled by API routes above
+    app.get(/.*/, (req, res) => {
         res.sendFile(path.resolve(frontendPath, "index.html"));
     });
 }
