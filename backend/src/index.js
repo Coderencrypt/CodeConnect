@@ -77,8 +77,8 @@ app.get("/books", (req, res) => {
 
 // Deployment Logic
 if (process.env.NODE_ENV === "production" || ENV.NODE_ENV === "production") {
-    const frontendPath = path.join(process.cwd(), "frontend", "dist");
-    
+    const frontendPath = path.join(process.cwd(), "..", "frontend", "dist");
+
     app.use(express.static(frontendPath));
 
     // Match all routes that are NOT handled by API routes above
