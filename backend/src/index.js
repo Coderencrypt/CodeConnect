@@ -25,7 +25,7 @@ if (ENV.NODE_ENV === "production") {
     app.use(express.static(path.join(__dirname, "frontend", "dist")));
 
     // 2. Serve index.html for any non-API routes
-    app.get("*", (req, res) => {
+    app.use((req, res) => {
         res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
     });
 }
