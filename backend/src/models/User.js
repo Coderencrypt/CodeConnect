@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema({
     },
     profileImage : {
         type : String,
-        default : ""
+        default : "",
     },
     clerkId : {
         type : String,
@@ -25,7 +25,7 @@ const userSchema = new mongoose.Schema({
     {timestamps : true} // createdAt , updatedAt
 );
 
-const User = mongoose.model("User",userSchema)
+const User = mongoose.model("User",userSchema);
 
 
 export default User;
