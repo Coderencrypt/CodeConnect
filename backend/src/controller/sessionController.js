@@ -151,11 +151,11 @@ export async function endSession(req, res) {
         }
 
         // delete stream video call
-        const call = streamClient.video.call("default", session.callId);
+        const call = streamClient.video.call("default", session.callID);
         await call.delete({ hard: true });
 
         // delete stream chat channel
-        const channel = chatClient.channel("messaging", session.callId);
+        const channel = chatClient.channel("messaging", session.callID);
         await channel.delete();
 
         session.status = "completed";
