@@ -5,7 +5,7 @@ function OutputPanel({ output }) {
         Output
       </div>
       <div className="flex-1 overflow-auto p-4">
-        {output === null ? (
+        {output === null || output === undefined ? (
           <p className="text-base-content/50 text-sm">Click "Run Code" to see the output here...</p>
         ) : output.success ? (
           <pre className="text-sm font-mono text-success whitespace-pre-wrap">{output.output}</pre>

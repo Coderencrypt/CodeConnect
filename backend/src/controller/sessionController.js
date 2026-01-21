@@ -12,13 +12,13 @@ export async function createSession(req, res) {
             return res.status(400).json({message:"Problem and Difficulty are required"});
         }
 
-        // generate a unique call id for stream video 
-        const callId = `session_${Date.now()}_${Math.random().toString(36).substring(7)}`;
+        // generate a unique call id for stream video
+        const callID = `session_${Date.now()}_${Math.random().toString(36).substring(7)}`;
 
         // create session in db
-        const session = await Session.create({problem, difficulty, host: userId, callId});
+        const session = await Session.create({problem, difficulty, host: userId, callID});
 
-        await streamClient.video.call("default",callId).getOrCreate({
+        await streamClient.video.call("default",callID).getOrCreate({
             data:{
                 created_by_id:clerkId,
                 custom: {problem, difficulty , sessionId: session._id.toString()},
@@ -28,7 +28,7 @@ export async function createSession(req, res) {
 
     //  chat messaging
 
-        const channel = chatClient.channel("messaging", callId,{
+        const channel = chatClient.channel("messaging", callID,{
             name:`${problem} Session`,
             created_by_id:clerkId,
             members:[clerkId],
@@ -121,7 +121,7 @@ export async function joinSession(req, res) {
     session.participant = userId;
     await session.save();
 
-    const channel = chatClient.channel("messaging", session.callId);
+    const channel = chatClient.channel("messaging", session.callID);
     await channel.addMembers([clerkId]);
 
     res.status(200).json({ session });
